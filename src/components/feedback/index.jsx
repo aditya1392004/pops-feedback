@@ -9,21 +9,23 @@ import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import StopCircleIcon from '@mui/icons-material/StopCircle';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import "./index.css";
-import loaderGif from "../../assets/loader.gif";
+import loaderGif from "../../assets/loader.gif"
 
 export const Feedback = () => {
   const mimeType = "audio/mp3";
+
   const recorderState = {
     "INITIAL": "initial",
     "START": "start",
     "STOP": "stop",
     "PAUSE": "pause",
     "RESUME": "resume"
-  };
+  }
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+
   const { merchant, feedback } = useSelector((state) => state.application);
   const mediaRecorder = useRef(null);
   const [permission, setPermission] = useState(false);
@@ -45,7 +47,7 @@ export const Feedback = () => {
       return;
     }
     startRecording();
-  };
+  }
 
   const getMicrophonePermission = async () => {
     if ("MediaRecorder" in window) {
@@ -87,10 +89,12 @@ export const Feedback = () => {
   };
 
   const stopRecording = () => {
+
     setIsBlinking(false);
     setIsStopped(true);
     setRecordingStatus(recorderState.STOP);
     setNotification("Recording Stopped");
+
 
     mediaRecorder.current.stop();
     mediaRecorder.current.onstop = () => {
@@ -106,13 +110,13 @@ export const Feedback = () => {
     else setNotification("Recording Paused");
     setIsBlinking(!isBlinking);
     mediaRecorder.current.pause();
-  };
+  }
 
   const resumeRecording = () => {
     setRecordingStatus(recorderState.RESUME);
     setNotification("Recording Resumed");
     mediaRecorder.current.resume();
-  };
+  }
 
   const submitFeedbackHandler = async () => {
     setShowLoader(true);
@@ -120,17 +124,16 @@ export const Feedback = () => {
     dispatch(record);
     console.log("completed");
     setShowLoader(false);
-    navigate("/sentiment");
-  };
+    navigate("/sentiment")
+  }
 
   useEffect(() => {
     getMicrophonePermission();
     if (Object.keys(merchant).length === 0) {
       dispatch(fetchMerchantDetails({ businessId: searchParams.get('businessId') }));
     }
-  }, []);
+  }, [])
 
-  
   return (
     <>
       <Snackbar
